@@ -36,7 +36,7 @@ begin
 				when regRead =>
 					nextState <= ALU;
 				when ALU =>
-					if (inst(6 downto 0) = "0000011" or inst(6 downto 0) = "0100011 ") then
+					if (inst = "0000011" or inst = "0100011") then
 						nextState <= memory;
 					else
 						nextState <= regWrite;

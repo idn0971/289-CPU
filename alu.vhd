@@ -21,6 +21,15 @@ end alu;
 architecture behavioral of alu is
 	signal output       : std_logic_vector(31 downto 0);
 	signal shouldBranch : std_logic;
+	signal zero         : std_logic_vector(30 downto 0) := "0000000000000000000000000000000";
+	function To_Std_Logic(L : BOOLEAN) return std_ulogic is
+	begin
+		if L then
+			return ('1');
+		else
+			return ('0');
+		end if;
+	end function To_Std_Logic;
 begin
 	process(clk)
 	begin
@@ -38,9 +47,9 @@ begin
 				when "00100" =>
 					output <= A xor B;
 				when "00101" =>
-					output <= std_logic_vector(signed(A) < signed(B));
+					output <= zero & To_Std_Logic(signed(A) < signed(B));
 				when "00110" =>
-					output <= std_logic_vector(unsigned(A) < unsigned(B));
+					output <= zero & To_Std_Logic(unsigned(A) < unsigned(B));
 				when "00111" =>
 					output <= std_logic_vector(shift_right(signed(A), to_integer(unsigned(B(4 downto 0)))));
 				when "01000" =>
@@ -59,9 +68,9 @@ begin
 					output <= B;
 				when "01111" =>
 					output <= std_logic_vector(signed(pc) + signed(B));
-				when "10000" or "10001" =>
+				when "10000"|"10001" =>
 					output <= std_logic_vector(signed(A) + signed(B));
-				when "10010" or "10011" =>
+				when "10010"|"10011" =>
 					output       <= std_logic_vector(signed(pc) + 4);
 					shouldBranch <= '1';
 				when "10100" =>

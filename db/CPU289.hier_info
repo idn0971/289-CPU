@@ -1,0 +1,5 @@
+|CPU289
+clk => ~NO_FANOUT~
+rst => ~NO_FANOUT~
+
+

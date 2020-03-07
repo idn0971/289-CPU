@@ -19,7 +19,7 @@ end decode;
 architecture Behavioral of decode is
 begin
 
-	process(clk, I_en)
+	process(clk)
 	begin
 		if rising_edge(clk) and I_en = '1' then
 			O_selA  <= I_dataInst(19 downto 15);
@@ -30,15 +30,15 @@ begin
 			O_aluop <= I_dataInst(6 downto 0);
 			case I_dataInst(6 downto 0) is
 				when "1100011" =>       -- S-type B-imm
-					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31)), 20)) & I_dataInst(7) & I_dataInst(30 downto 25) & I_dataInst(11 downto 8) & '0';
+					O_dataIMM <= std_logic_vector(resize(signed(std_logic_vector'(I_dataInst(31) & I_dataInst(31))), 20)) & I_dataInst(7) & I_dataInst(30 downto 25) & I_dataInst(11 downto 8) & '0';
 				when "1101111" =>
-					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31)), 12)) & I_dataInst(19 downto 12) & I_dataInst(20) & I_dataInst(30 downto 25) & I_dataInst(24 downto 21) & '0';
+					O_dataIMM <= std_logic_vector(resize(signed(std_logic_vector'(I_dataInst(31) & I_dataInst(31))), 12)) & I_dataInst(19 downto 12) & I_dataInst(20) & I_dataInst(30 downto 25) & I_dataInst(24 downto 21) & '0';
 				when "0100011" =>
-					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31)), 21)) & I_dataInst(30 downto 25) & I_dataInst(11 downto 8) & I_dataInst(7);
-				when "0110111" or "00100111" =>
+					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31 downto 25)), 27))  & I_dataInst(11 downto 8) & I_dataInst(7);
+				when "0110111"|"00100111" =>
 					O_dataIMM <= I_dataInst(31 downto 12) & "000000000000";
 				when others =>
-					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31)), 21)) & I_dataInst(30 downto 20);
+					O_dataIMM <= std_logic_vector(resize(unsigned(I_dataInst(31 downto 20)), 32));
 			end case;
 			--case I_dataInst(15 downto 12) is
 			--when "0011" =>   -- WRITE
