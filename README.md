@@ -3,4 +3,6 @@
  
  This CPU is designed as a basic non pipelined CPU that can be further expanded on.
  
- Currently the CPU is not in a usable state as the top level control logic still needs to be implemented.
+ Currently the CPU should work if given proper inputs.
+ 
+ Still need to write test cases and figure out someway to get outputs off of CPU.
