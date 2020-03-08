@@ -1,5 +1,5 @@
 Assembler report for CPU289
-Fri Mar 06 23:49:47 2020
+Sun Mar 08 03:11:38 2020
 Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 
 
@@ -38,7 +38,7 @@ agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Fri Mar 06 23:49:47 2020 ;
+; Assembler Status      ; Successful - Sun Mar 08 03:11:38 2020 ;
 ; Revision Name         ; CPU289                                ;
 ; Top-level Entity Name ; CPU289                                ;
 ; Family                ; Cyclone IV E                          ;
@@ -79,14 +79,14 @@ agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus Prime Assembler
     Info: Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
-    Info: Processing started: Fri Mar 06 23:49:46 2020
+    Info: Processing started: Sun Mar 08 03:11:37 2020
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off CPU289 -c CPU289
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 4687 megabytes
-    Info: Processing ended: Fri Mar 06 23:49:47 2020
+    Info: Peak virtual memory: 4688 megabytes
+    Info: Processing ended: Sun Mar 08 03:11:38 2020
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

@@ -10,10 +10,13 @@ entity controlUnit is
 		O_selB     : out STD_LOGIC_VECTOR(4 downto 0);
 		O_selD     : out STD_LOGIC_VECTOR(4 downto 0);
 		O_dataIMM  : out STD_LOGIC_VECTOR(31 downto 0);
-		--O_regDwe : out  STD_LOGIC;
-		O_funct7     : out std_logic_vector(6 downto 0);
-		O_funct3     : out std_logic_vector(2 downto 0);
+		O_regDwe   : out STD_LOGIC;
 		O_aluop    : out STD_LOGIC_VECTOR(4 downto 0);
+		memWren    : out std_logic;
+		memToReg   : out std_logic;
+		branch     : out std_logic;
+		aluImm     : out std_logic;
+		jumpReg    : out std_logic;
 		regREn     : out std_logic;
 		regWEn     : out std_logic;
 		aluEn      : out std_logic;
@@ -47,7 +50,12 @@ architecture RTL of controlUnit is
 		     O_selB     : out STD_LOGIC_VECTOR(4 downto 0);
 		     O_selD     : out STD_LOGIC_VECTOR(4 downto 0);
 		     O_dataIMM  : out STD_LOGIC_VECTOR(31 downto 0);
-		     --O_regDwe : out  STD_LOGIC;
+		     O_regDwe   : out STD_LOGIC;
+		     memWren    : out std_logic;
+		     memToReg   : out std_logic;
+		     branch     : out std_logic;
+		     aluImm     : out std_logic;
+		     jumpReg    : out std_logic;
 		     funct7     : out std_logic_vector(6 downto 0);
 		     funct3     : out std_logic_vector(2 downto 0);
 		     O_aluop    : out STD_LOGIC_VECTOR(6 downto 0));
@@ -66,8 +74,8 @@ architecture RTL of controlUnit is
 
 	signal decodeEn : std_logic;
 	signal opcode   : std_logic_vector(6 downto 0);
-	signal funct7 : std_logic_vector(6 downto 0);
-	signal funct3 : std_logic_vector(2 downto 0);
+	signal funct7   : std_logic_vector(6 downto 0);
+	signal funct3   : std_logic_vector(2 downto 0);
 begin
 	fsm : controlFSM
 		port map(
@@ -90,16 +98,23 @@ begin
 			O_selB     => O_selB,
 			O_selD     => O_selD,
 			O_dataIMM  => O_dataIMM,
+			O_regDwe   => O_regDwe,
+			memWren    => memWren,
+			memToReg   => memToReg,
+			branch     => branch,
+			aluImm     => aluImm,
+			jumpReg    => jumpReg,
 			funct7     => funct7,
 			funct3     => funct3,
 			O_aluop    => opcode
 		);
-	aluDecoder : aluDecode port map(
-		clk       => clk,
-		en        => decodeEn,
-		opcode    => opcode,
-		funct3    => funct3,
-		funct7    => funct7,
-		aluOpcode => O_aluop
-	);
+	aluDecoder : aluDecode
+		port map(
+			clk       => clk,
+			en        => decodeEn,
+			opcode    => opcode,
+			funct3    => funct3,
+			funct7    => funct7,
+			aluOpcode => O_aluop
+		);
 end architecture RTL;

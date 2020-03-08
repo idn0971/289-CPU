@@ -1,0 +1,9 @@
+
+State Machine - |CPU289|controlUnit:control|controlFSM:fsm|nextState
+Name nextState.regWrite nextState.memory nextState.ALU nextState.regRead nextState.Fetch nextState.Decode 
+nextState.Decode 0 0 0 0 0 0 
+nextState.Fetch 0 0 0 0 1 1 
+nextState.regRead 0 0 0 1 0 1 
+nextState.ALU 0 0 1 0 0 1 
+nextState.memory 0 1 0 0 0 1 
+nextState.regWrite 1 0 0 0 0 1 

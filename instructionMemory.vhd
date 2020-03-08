@@ -1,4 +1,4 @@
--- megafunction wizard: %RAM: 1-PORT%
+-- megafunction wizard: %ROM: 1-PORT%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
 -- MODULE: altsyncram 
@@ -43,10 +43,8 @@ USE altera_mf.altera_mf_components.all;
 ENTITY instructionMemory IS
 	PORT
 	(
-		address		: IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+		address		: IN STD_LOGIC_VECTOR (9 DOWNTO 0);
 		clock		: IN STD_LOGIC  := '1';
-		data		: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-		wren		: IN STD_LOGIC ;
 		q		: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
 	);
 END instructionMemory;
@@ -61,27 +59,24 @@ BEGIN
 
 	altsyncram_component : altsyncram
 	GENERIC MAP (
+		address_aclr_a => "NONE",
 		clock_enable_input_a => "BYPASS",
 		clock_enable_output_a => "BYPASS",
-		init_file => "",
+		init_file => "cpuInstructions.mif",
 		intended_device_family => "Cyclone IV E",
 		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
 		lpm_type => "altsyncram",
-		numwords_a => 512,
-		operation_mode => "SINGLE_PORT",
+		numwords_a => 1024,
+		operation_mode => "ROM",
 		outdata_aclr_a => "NONE",
 		outdata_reg_a => "CLOCK0",
-		power_up_uninitialized => "FALSE",
-		read_during_write_mode_port_a => "NEW_DATA_NO_NBE_READ",
-		widthad_a => 9,
+		widthad_a => 10,
 		width_a => 32,
 		width_byteena_a => 1
 	)
 	PORT MAP (
 		address_a => address,
 		clock0 => clock,
-		data_a => data,
-		wren_a => wren,
 		q_a => sub_wire0
 	);
 
@@ -95,7 +90,6 @@ END SYN;
 -- Retrieval info: PRIVATE: ADDRESSSTALL_A NUMERIC "0"
 -- Retrieval info: PRIVATE: AclrAddr NUMERIC "0"
 -- Retrieval info: PRIVATE: AclrByte NUMERIC "0"
--- Retrieval info: PRIVATE: AclrData NUMERIC "0"
 -- Retrieval info: PRIVATE: AclrOutput NUMERIC "0"
 -- Retrieval info: PRIVATE: BYTE_ENABLE NUMERIC "0"
 -- Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "8"
@@ -103,7 +97,6 @@ END SYN;
 -- Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
 -- Retrieval info: PRIVATE: CLOCK_ENABLE_OUTPUT_A NUMERIC "0"
 -- Retrieval info: PRIVATE: Clken NUMERIC "0"
--- Retrieval info: PRIVATE: DataBusSeparated NUMERIC "1"
 -- Retrieval info: PRIVATE: IMPLEMENT_IN_LES NUMERIC "0"
 -- Retrieval info: PRIVATE: INIT_FILE_LAYOUT STRING "PORT_A"
 -- Retrieval info: PRIVATE: INIT_TO_SIM_X NUMERIC "0"
@@ -111,45 +104,37 @@ END SYN;
 -- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 -- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 -- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
--- Retrieval info: PRIVATE: MIFfilename STRING ""
--- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "512"
+-- Retrieval info: PRIVATE: MIFfilename STRING "cpuInstructions.mif"
+-- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "1024"
 -- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
--- Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_A NUMERIC "3"
 -- Retrieval info: PRIVATE: RegAddr NUMERIC "1"
--- Retrieval info: PRIVATE: RegData NUMERIC "1"
 -- Retrieval info: PRIVATE: RegOutput NUMERIC "1"
 -- Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 -- Retrieval info: PRIVATE: SingleClock NUMERIC "1"
--- Retrieval info: PRIVATE: UseDQRAM NUMERIC "1"
--- Retrieval info: PRIVATE: WRCONTROL_ACLR_A NUMERIC "0"
--- Retrieval info: PRIVATE: WidthAddr NUMERIC "9"
+-- Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
+-- Retrieval info: PRIVATE: WidthAddr NUMERIC "10"
 -- Retrieval info: PRIVATE: WidthData NUMERIC "32"
 -- Retrieval info: PRIVATE: rden NUMERIC "0"
 -- Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
+-- Retrieval info: CONSTANT: ADDRESS_ACLR_A STRING "NONE"
 -- Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
 -- Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
--- Retrieval info: CONSTANT: INIT_FILE STRING ""
+-- Retrieval info: CONSTANT: INIT_FILE STRING "cpuInstructions.mif"
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone IV E"
 -- Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
--- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "512"
--- Retrieval info: CONSTANT: OPERATION_MODE STRING "SINGLE_PORT"
+-- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "1024"
+-- Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 -- Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
 -- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "CLOCK0"
--- Retrieval info: CONSTANT: POWER_UP_UNINITIALIZED STRING "FALSE"
--- Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_A STRING "NEW_DATA_NO_NBE_READ"
--- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "9"
+-- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "10"
 -- Retrieval info: CONSTANT: WIDTH_A NUMERIC "32"
 -- Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
--- Retrieval info: USED_PORT: address 0 0 9 0 INPUT NODEFVAL "address[8..0]"
+-- Retrieval info: USED_PORT: address 0 0 10 0 INPUT NODEFVAL "address[9..0]"
 -- Retrieval info: USED_PORT: clock 0 0 0 0 INPUT VCC "clock"
--- Retrieval info: USED_PORT: data 0 0 32 0 INPUT NODEFVAL "data[31..0]"
 -- Retrieval info: USED_PORT: q 0 0 32 0 OUTPUT NODEFVAL "q[31..0]"
--- Retrieval info: USED_PORT: wren 0 0 0 0 INPUT NODEFVAL "wren"
--- Retrieval info: CONNECT: @address_a 0 0 9 0 address 0 0 9 0
+-- Retrieval info: CONNECT: @address_a 0 0 10 0 address 0 0 10 0
 -- Retrieval info: CONNECT: @clock0 0 0 0 0 clock 0 0 0 0
--- Retrieval info: CONNECT: @data_a 0 0 32 0 data 0 0 32 0
--- Retrieval info: CONNECT: @wren_a 0 0 0 0 wren 0 0 0 0
 -- Retrieval info: CONNECT: q 0 0 32 0 @q_a 0 0 32 0
 -- Retrieval info: GEN_FILE: TYPE_NORMAL instructionMemory.vhd TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL instructionMemory.inc FALSE
