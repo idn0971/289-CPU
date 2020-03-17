@@ -141,9 +141,9 @@ begin
 	regEn <= std_logic(regREn) or std_logic(regWEn);
 	aluB  <= dataImm when aluImm = '1' else dataB;
 	dataD <= dataMem when memToReg = '1' else aluOut;
-	newPC <= std_logic_vector(signed(pc) + signed(dataImm)) when branchAlu = '1' and branchControl = '1'
-	         else std_logic_vector(signed(dataA) + signed(dataImm)) and x"fffffffe" when jumpReg = '1' and branchAlu = '1'
-	         else std_logic_vector(signed(pc) + 4);
+	newPC <= std_logic_vector(signed(pc) + signed(dataImm)) when branchAlu = '1' and branchControl = '1' and regWEn = '1'
+	         else std_logic_vector(signed(dataA) + signed(dataImm)) and x"fffffffe" when jumpReg = '1' and branchAlu = '1' and regWEn = '1'
+	         else std_logic_vector(signed(pc) + 4) when regWEn = '1';
 	instROM : instructionMemory
 		port map(
 			address => pc(9 downto 0),
