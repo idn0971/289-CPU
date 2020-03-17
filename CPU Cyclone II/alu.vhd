@@ -21,7 +21,7 @@ end alu;
 architecture behavioral of alu is
 	signal output       : std_logic_vector(31 downto 0);
 	signal shouldBranch : std_logic;
-	constant zero         : std_logic_vector(30 downto 0) := "0000000000000000000000000000000";
+	--constant zero         : std_logic_vector(30 downto 0) := "0000000000000000000000000000000";
 	function To_Std_Logic(L : BOOLEAN) return std_ulogic is
 	begin
 		if L then
@@ -30,7 +30,7 @@ architecture behavioral of alu is
 			return ('0');
 		end if;
 	end function To_Std_Logic;
-	signal mult : std_logic_vector(63 downto 0);
+	signal mult         : std_logic_vector(63 downto 0);
 begin
 	process(clk)
 	begin
@@ -48,9 +48,17 @@ begin
 				when "00100" =>
 					output <= A xor B;
 				when "00101" =>
-					output <= zero & To_Std_Logic(signed(A) < signed(B));
+					if signed(A) < signed(B) then
+						output <= x"00000001";
+					else
+						output <= x"00000000";
+					end if;
 				when "00110" =>
-					output <= zero & To_Std_Logic(unsigned(A) < unsigned(B));
+					if unsigned(A) < unsigned(B) then
+						output <= x"00000001";
+					else
+						output <= x"00000000";
+					end if;
 				when "00111" =>
 					output <= std_logic_vector(shift_right(signed(A), to_integer(unsigned(B(4 downto 0)))));
 				when "01000" =>
@@ -64,9 +72,9 @@ begin
 				when "01100" =>
 					output <= std_logic_vector(shift_left(unsigned(A), to_integer(unsigned(imm))));
 				when "01101" =>
-					mult <= std_logic_vector(signed(A) * signed(B));
+					mult   <= std_logic_vector(signed(A) * signed(B));
 					output <= mult(31 downto 0);
-				when "01110" => 
+				when "01110" =>
 					output <= B;
 				when "01111" =>
 					output <= std_logic_vector(signed(pc) + signed(B));
