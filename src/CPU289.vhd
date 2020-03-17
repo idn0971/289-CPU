@@ -3,11 +3,16 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity CPU289 is
-	port(
-		clk : in std_logic;
-		rst : in std_logic
+	generic(
+		digits : INTEGER := 8
 	);
-end entity CPU289;
+	port(
+		clk           : in  std_logic;
+		sel7seg       : in  std_logic_vector(4 downto 0);
+		displays_7seg : OUT STD_LOGIC_VECTOR(digits * 7 - 1 DOWNTO 0);
+		rst           : in  std_logic
+	);
+end  CPU289;
 
 architecture RTL of CPU289 is
 	component controlUnit is
@@ -47,20 +52,25 @@ architecture RTL of CPU289 is
 			clk    : IN  STD_LOGIC);
 	end component alu;
 
-	component reg32by32 is
-		Port(clk   : in  std_logic;
-		     dataD : in  std_logic_vector(31 downto 0);
-		     selA  : in  STD_LOGIC_VECTOR(4 downto 0);
-		     selB  : in  STD_LOGIC_VECTOR(4 downto 0);
-		     selD  : in  STD_LOGIC_VECTOR(4 downto 0);
-		     we    : in  std_logic;
-		     dataA : out std_logic_vector(31 downto 0);
-		     dataB : out std_logic_vector(31 downto 0));
+	component reg32by32
+		port(
+			clk      : in  std_logic;
+			dataD    : in  std_logic_vector(31 downto 0);
+			selA     : in  STD_LOGIC_VECTOR(4 downto 0);
+			selB     : in  STD_LOGIC_VECTOR(4 downto 0);
+			sel7Seg  : in  std_logic_vector(4 downto 0);
+			selD     : in  STD_LOGIC_VECTOR(4 downto 0);
+			we       : in  std_logic;
+			en       : in  std_logic;
+			dataA    : out std_logic_vector(31 downto 0);
+			data7seg : out std_logic_vector(31 downto 0);
+			dataB    : out std_logic_vector(31 downto 0)
+		);
 	end component reg32by32;
 
 	component memory
 		PORT(
-			address : IN  STD_LOGIC_VECTOR(11 DOWNTO 0);
+			address : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
 			clock   : IN  STD_LOGIC := '1';
 			data    : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 			wren    : IN  STD_LOGIC;
@@ -85,6 +95,14 @@ architecture RTL of CPU289 is
 		    );
 	end component pc_unit;
 
+	component to_7seg is
+	Port(A    : in  STD_LOGIC_VECTOR(3 downto 0);
+	     rst  : in  std_logic;
+	     clk  : in  std_logic;
+	     seg7 : out STD_LOGIC_VECTOR(6 downto 0)
+	    );
+end component to_7seg;
+
 	signal instruction   : STD_LOGIC_VECTOR(31 downto 0);
 	signal selA          : STD_LOGIC_VECTOR(4 downto 0);
 	signal selB          : STD_LOGIC_VECTOR(4 downto 0);
@@ -94,7 +112,7 @@ architecture RTL of CPU289 is
 	signal aluOp         : STD_LOGIC_VECTOR(4 downto 0);
 	signal memWren       : std_logic;
 	signal memToReg      : std_logic;
-	signal branchControl : std_logic;
+	signal branchControl : std_logic := '0';
 	signal aluImm        : std_logic;
 	signal jumpReg       : std_logic;
 	signal regREn        : std_logic;
@@ -111,10 +129,11 @@ architecture RTL of CPU289 is
 	signal aluB          : std_logic_vector(31 downto 0);
 	signal dataMem       : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	signal newPC         : STD_LOGIC_VECTOR(31 downto 0);
+	signal data7seg      : std_logic_vector(31 downto 0);
 
 begin
 
-	aluB  <= dataImm when aluImm = '1' else aluB;
+	aluB  <= dataImm when aluImm = '1' else dataB;
 	dataD <= dataMem when memToReg = '1' else aluOut;
 	newPC <= std_logic_vector(signed(pc) + signed(dataImm)) when branchAlu = '1' and branchControl = '1'
 	         else std_logic_vector(signed(dataA) + signed(dataImm)) and x"fffffffe" when jumpReg = '1' and branchAlu = '1'
@@ -151,14 +170,17 @@ begin
 
 	regFile : reg32by32
 		port map(
-			clk   => clk,
-			dataD => dataD,
-			selA  => selA,
-			selB  => selB,
-			selD  => selD,
-			we    => regDwe,
-			dataA => dataA,
-			dataB => dataB
+			clk      => clk,
+			dataD    => dataD,
+			selA     => selA,
+			selB     => selB,
+			sel7Seg  => sel7seg,
+			selD     => selD,
+			we       => regDwe,
+			en       => regREn or regWEn,
+			dataA    => dataA,
+			data7seg => data7seg,
+			dataB    => dataB
 		);
 
 	cpuAlu : alu
@@ -176,7 +198,7 @@ begin
 
 	ram : memory
 		port map(
-			address => aluOut(11 downto 0),
+			address => aluOut(12 downto 0),
 			clock   => clk,
 			data    => dataB,
 			wren    => memWren,
@@ -191,4 +213,12 @@ begin
 			fetchEn => fetchEn,
 			O_PC    => pc
 		);
+
+--	sevenSeg1 : to_7seg
+	--	port map(
+		--	A => data7seg(3 downto 0),
+		--	rst => rst,
+			--clk => clk,
+		--	seg7 => displays_7seg(6 downto 0)
+	--	);
 end architecture RTL;

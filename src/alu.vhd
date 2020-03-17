@@ -21,7 +21,7 @@ end alu;
 architecture behavioral of alu is
 	signal output       : std_logic_vector(31 downto 0);
 	signal shouldBranch : std_logic;
-	signal zero         : std_logic_vector(30 downto 0) := "0000000000000000000000000000000";
+	constant zero         : std_logic_vector(30 downto 0) := "0000000000000000000000000000000";
 	function To_Std_Logic(L : BOOLEAN) return std_ulogic is
 	begin
 		if L then

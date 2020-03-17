@@ -22,7 +22,7 @@ architecture behavior of controlFSM is
 begin
 	process(clk, reset, currState, nextState)
 	begin
-		if reset = '1' then
+		if reset = '0' then
 			currState <= Fetch;
 		else
 			currState <= nextState;

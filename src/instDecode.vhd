@@ -36,7 +36,7 @@ begin
 			case I_dataInst(6 downto 0) is
 				when "1100011" =>       -- S-type B-imm
 					O_dataIMM <= std_logic_vector(resize(signed(std_logic_vector'(I_dataInst(31) & I_dataInst(31))), 20)) & I_dataInst(7) & I_dataInst(30 downto 25) & I_dataInst(11 downto 8) & '0';
-				when "1101111" =>
+				when "1101111" | "1100111" =>
 					O_dataIMM <= std_logic_vector(resize(signed(std_logic_vector'(I_dataInst(31) & I_dataInst(31))), 12)) & I_dataInst(19 downto 12) & I_dataInst(20) & I_dataInst(30 downto 25) & I_dataInst(24 downto 21) & '0';
 				when "0100011" =>
 					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31 downto 25)), 27)) & I_dataInst(11 downto 8) & I_dataInst(7);

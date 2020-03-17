@@ -1,0 +1,56 @@
+# Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+# do CPU289_run_msim_rtl_vhdl.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying C:\altera\13.0sp1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied C:\altera\13.0sp1\modelsim_ase\win32aloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/seven_segments.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity seven_segments
+# -- Compiling architecture logic of seven_segments
+# vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/binary_to_bcd_digit.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity binary_to_bcd_digit
+# -- Compiling architecture logic of binary_to_bcd_digit
+# vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/binary_to_bcd.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity binary_to_bcd
+# -- Compiling architecture logic of binary_to_bcd
+# vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/bcd_to_7seg_display.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Compiling entity bcd_to_7seg_display
+# -- Compiling architecture logic of bcd_to_7seg_display
+# vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/alu.vhd}
+# Model Technology ModelSim ALTERA vcom 10.1d Compiler 2012.11 Nov  2 2012
+# -- Loading package STANDARD
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# -- Loading package NUMERIC_STD
+# -- Compiling entity alu
+# -- Compiling architecture behavioral of alu
+# ** Error: C:/Users/idn09/Documents/ECE 289/289 CPU/src/alu.vhd(66): Prefix of slice name cannot be type conversion (STD_LOGIC_VECTOR) expression.
+# ** Error: C:/Users/idn09/Documents/ECE 289/289 CPU/src/alu.vhd(118): VHDL Compiler exiting
+# ** Error: C:/altera/13.0sp1/modelsim_ase/win32aloem/vcom failed.
+# Error in macro ./CPU289_run_msim_rtl_vhdl.do line 12
+# C:/altera/13.0sp1/modelsim_ase/win32aloem/vcom failed.
+#     while executing
+# "vcom -2008 -work work {C:/Users/idn09/Documents/ECE 289/289 CPU/src/alu.vhd}"

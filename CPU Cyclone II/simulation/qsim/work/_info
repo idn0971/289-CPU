@@ -1,0 +1,45 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\Users\idn09\Documents\ECE 289\CPU Cyclone II\simulation\qsim
+vCPU289
+Z1 !s100 E3l9@neX==@i=Ej;7>hF@0
+Z2 I><hYE6^^]a1HNbk3fBiY<3
+Z3 VOmI56ncEbYR;`3zoQNT_f2
+Z4 dC:\Users\idn09\Documents\ECE 289\CPU Cyclone II\simulation\qsim
+Z5 w1584146772
+Z6 8CPU289.vo
+Z7 FCPU289.vo
+L0 31
+Z8 OV;L;10.1d;51
+r1
+31
+Z9 !s90 -work|work|CPU289.vo|
+Z10 o-work work -O0
+Z11 n@c@p@u289
+!i10b 1
+!s85 0
+Z12 !s108 1584146772.664000
+Z13 !s107 CPU289.vo|
+!s101 -O0
+vCPU289_vlg_vec_tst
+!i10b 1
+!s100 fZN^;R8H]`0g2z=jY9n[D1
+IYj00:1RWgIALnV^P3WI2k2
+Z14 VdahU?O8JXIZiSjb?];Kz:1
+R4
+w1584146770
+Z15 8CPU289.vt
+Z16 FCPU289.vt
+L0 29
+R8
+r1
+!s85 0
+31
+!s108 1584146773.105000
+!s107 CPU289.vt|
+Z17 !s90 -work|work|CPU289.vt|
+!s101 -O0
+R10
+Z18 n@c@p@u289_vlg_vec_tst

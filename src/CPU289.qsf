@@ -38,7 +38,7 @@
 
 
 set_global_assignment -name FAMILY "Cyclone IV E"
-set_global_assignment -name DEVICE AUTO
+set_global_assignment -name DEVICE EP4CE115F29C7
 set_global_assignment -name TOP_LEVEL_ENTITY CPU289
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "09:41:43  FEBRUARY 28, 2020"
@@ -49,18 +49,94 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name PROJECT_IP_REGENERATION_POLICY ALWAYS_REGENERATE_IP
 set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
 set_global_assignment -name VHDL_SHOW_LMF_MAPPING_MESSAGES OFF
+set_global_assignment -name VHDL_FILE seven_segments.vhd
+set_global_assignment -name VHDL_FILE binary_to_bcd_digit.vhd
+set_global_assignment -name VHDL_FILE binary_to_bcd.vhd
+set_global_assignment -name VHDL_FILE bcd_to_7seg_display.vhd
 set_global_assignment -name SOURCE_FILE memory.cmp
 set_global_assignment -name SOURCE_FILE instructionMemory.cmp
 set_global_assignment -name VHDL_FILE alu.vhd
 set_global_assignment -name VHDL_FILE controlFSM.vhd
-set_global_assignment -name VHDL_FILE memory.vhd
 set_global_assignment -name QIP_FILE memory.qip
 set_global_assignment -name VHDL_FILE reg32by32.vhd
 set_global_assignment -name VHDL_FILE pc_Unit.vhd
-set_global_assignment -name QIP_FILE instructionMemory.qip
 set_global_assignment -name VHDL_FILE CPU289.vhd
 set_global_assignment -name VHDL_FILE instDecode.vhd
 set_global_assignment -name VHDL_FILE controlUnit.vhd
 set_global_assignment -name VHDL_FILE aluDecode.vhd
 set_global_assignment -name MIF_FILE cpuInstructions.mif
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name MIF_FILE factorial.mif
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name QIP_FILE instructionMemory.qip
+set_location_assignment PIN_M23 -to rst
+set_location_assignment PIN_G18 -to displays_7seg[0]
+set_location_assignment PIN_F22 -to displays_7seg[1]
+set_location_assignment PIN_E17 -to displays_7seg[2]
+set_location_assignment PIN_L26 -to displays_7seg[3]
+set_location_assignment PIN_L25 -to displays_7seg[4]
+set_location_assignment PIN_J22 -to displays_7seg[5]
+set_location_assignment PIN_H22 -to displays_7seg[6]
+set_location_assignment PIN_M24 -to displays_7seg[7]
+set_location_assignment PIN_Y22 -to displays_7seg[8]
+set_location_assignment PIN_W21 -to displays_7seg[9]
+set_location_assignment PIN_W22 -to displays_7seg[10]
+set_location_assignment PIN_W25 -to displays_7seg[11]
+set_location_assignment PIN_U23 -to displays_7seg[12]
+set_location_assignment PIN_U24 -to displays_7seg[13]
+set_location_assignment PIN_AA25 -to displays_7seg[14]
+set_location_assignment PIN_AA26 -to displays_7seg[15]
+set_location_assignment PIN_Y25 -to displays_7seg[16]
+set_location_assignment PIN_W26 -to displays_7seg[17]
+set_location_assignment PIN_Y26 -to displays_7seg[18]
+set_location_assignment PIN_W27 -to displays_7seg[19]
+set_location_assignment PIN_W28 -to displays_7seg[20]
+set_location_assignment PIN_V21 -to displays_7seg[21]
+set_location_assignment PIN_U21 -to displays_7seg[22]
+set_location_assignment PIN_AB20 -to displays_7seg[23]
+set_location_assignment PIN_AA21 -to displays_7seg[24]
+set_location_assignment PIN_AD24 -to displays_7seg[25]
+set_location_assignment PIN_AF23 -to displays_7seg[26]
+set_location_assignment PIN_Y19 -to displays_7seg[27]
+set_location_assignment PIN_AB19 -to displays_7seg[28]
+set_location_assignment PIN_AA19 -to displays_7seg[29]
+set_location_assignment PIN_AG21 -to displays_7seg[30]
+set_location_assignment PIN_AH21 -to displays_7seg[31]
+set_location_assignment PIN_AE19 -to displays_7seg[32]
+set_location_assignment PIN_AF19 -to displays_7seg[33]
+set_location_assignment PIN_AE18 -to displays_7seg[34]
+set_location_assignment PIN_AD18 -to displays_7seg[35]
+set_location_assignment PIN_AC18 -to displays_7seg[36]
+set_location_assignment PIN_AB18 -to displays_7seg[37]
+set_location_assignment PIN_AH19 -to displays_7seg[38]
+set_location_assignment PIN_AG19 -to displays_7seg[39]
+set_location_assignment PIN_AF18 -to displays_7seg[40]
+set_location_assignment PIN_AH18 -to displays_7seg[41]
+set_location_assignment PIN_AA17 -to displays_7seg[42]
+set_location_assignment PIN_AB16 -to displays_7seg[43]
+set_location_assignment PIN_AA16 -to displays_7seg[44]
+set_location_assignment PIN_AB17 -to displays_7seg[45]
+set_location_assignment PIN_AB15 -to displays_7seg[46]
+set_location_assignment PIN_AA15 -to displays_7seg[47]
+set_location_assignment PIN_AC17 -to displays_7seg[48]
+set_location_assignment PIN_AD17 -to displays_7seg[49]
+set_location_assignment PIN_AE17 -to displays_7seg[50]
+set_location_assignment PIN_AG17 -to displays_7seg[51]
+set_location_assignment PIN_AH17 -to displays_7seg[52]
+set_location_assignment PIN_AF17 -to displays_7seg[53]
+set_location_assignment PIN_AG18 -to displays_7seg[54]
+set_location_assignment PIN_AA14 -to displays_7seg[55]
+set_location_assignment PIN_AB28 -to sel7seg[0]
+set_location_assignment PIN_AC28 -to sel7seg[1]
+set_location_assignment PIN_AC27 -to sel7seg[2]
+set_location_assignment PIN_AD27 -to sel7seg[3]
+set_location_assignment PIN_AB27 -to sel7seg[4]
+set_location_assignment PIN_Y2 -to clk
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name EDA_RUN_TOOL_AUTOMATICALLY ON -section_id eda_simulation
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
