@@ -101,11 +101,11 @@ architecture RTL of CPU289 is
 		    );
 	end component to_7seg;
 
-	component signal_generator is
+	component clockDivider is
 		port(
-			clk, reset : in  std_logic;
-			clk_out    : out std_logic);
-	end component signal_generator;
+			CLK_50MHz : in  std_logic;  -- clock signal
+			clk       : out std_logic); -- clk to blink
+	end component clockDivider;
 
 	signal instruction   : STD_LOGIC_VECTOR(31 downto 0);
 	signal selA          : STD_LOGIC_VECTOR(4 downto 0);
@@ -151,7 +151,7 @@ begin
 			q       => instruction
 		);
 
-	--clockDivide : signal_generator 
+	--clockDivide : clockDivider 
 	--	port map(
 	--clk => clkIn,
 	--	reset => rst,

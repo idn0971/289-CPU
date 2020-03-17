@@ -1,3 +1,0 @@
-addi t0, zero, 10
-add t1, t0, t0
-#end: jal end
