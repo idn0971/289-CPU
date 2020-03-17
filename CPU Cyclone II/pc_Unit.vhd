@@ -8,7 +8,7 @@ entity pc_unit is
 	     reset   : in  std_LOGIC;
 	     --shouldBranch : in  std_LOGIC;
 	     fetchEn  : in  std_LOGIC;
-	     O_PC    : out STD_LOGIC_VECTOR(31 downto 0)
+	     O_PC    : out STD_LOGIC_VECTOR(31 downto 0) := X"00000000"
 	    );
 end pc_unit;
 
