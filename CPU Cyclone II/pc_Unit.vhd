@@ -13,23 +13,21 @@ entity pc_unit is
 end pc_unit;
 
 architecture Behavioral of pc_unit is
-	signal current_pc : std_logic_vector(31 downto 0) := X"00000000";
+	--signal current_pc : std_logic_vector(31 downto 0) := X"00000000";
 begin
 
-	process(I_clk, current_pc)
+	process(I_clk)
 	begin
 		if rising_edge(I_clk) and (fetchEn = '1' or reset = '0') then
 
 			if reset = '0' then
-				current_pc <= X"00000000";
+				O_PC <= X"00000000";
 			else
-				current_pc <= I_nPC;
+				O_PC <= I_nPC;
 			end if;
-		else
-			current_pc <= current_pc;
 		end if;
 	end process;
 
-	O_PC <= current_pc;
+	--O_PC <= current_pc;
 
 end Behavioral;
