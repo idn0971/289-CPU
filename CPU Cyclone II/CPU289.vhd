@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity CPU289 is
 	port(
-		clk           : in  std_logic;
+		clkIn         : in  std_logic;
 		sel7seg       : in  std_logic_vector(4 downto 0);
 		displays_7seg : OUT STD_LOGIC_VECTOR(27 DOWNTO 0);
 		rst           : in  std_logic
@@ -135,7 +135,7 @@ architecture RTL of CPU289 is
 	signal newPC         : STD_LOGIC_VECTOR(31 downto 0);
 	signal data7seg      : std_logic_vector(31 downto 0);
 	signal regEn         : std_logic;
-	--signal clk : std_logic := '1';
+	signal clk           : std_logic := '1';
 
 begin
 	regEn <= std_logic(regREn) or std_logic(regWEn);
@@ -143,7 +143,8 @@ begin
 	dataD <= dataMem when memToReg = '1' else aluOut;
 	newPC <= std_logic_vector(signed(pc) + signed(dataImm)) when (branchAlu = '1' and branchControl = '1' and regWEn = '1')
 	         else std_logic_vector(signed(dataA) + signed(dataImm)) and x"fffffffe" when (jumpReg = '1' and branchAlu = '1' and regWEn = '1')
-	         else std_logic_vector(signed(pc) + 4) when regWEn = '1';
+	         else std_logic_vector(signed(pc) + 4) when regWEn = '1'
+	;
 	instROM : instructionMemory
 		port map(
 			address => pc(9 downto 0),
@@ -151,12 +152,11 @@ begin
 			q       => instruction
 		);
 
-	--clockDivide : clockDivider 
-	--	port map(
-	--clk => clkIn,
-	--	reset => rst,
-	--clK_out => clk
-	--	);
+	clockDivide : clockDivider
+		port map(
+			CLK_50MHz => clkIn,
+			clk       => clk
+		);
 
 	control : controlUnit
 		port map(
