@@ -23,7 +23,7 @@ begin  -- Behavior
    begin  -- process Prescaler
 
       if CLK_50MHz'event and CLK_50MHz = '1' then  -- rising clock edge
-         if counter < 10000000 then   -- Binary value is
+         if counter < 5000000 then   -- Binary value is
                                                          -- 25e6
             counter <= counter + 1;
          else
