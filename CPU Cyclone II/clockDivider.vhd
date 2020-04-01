@@ -9,7 +9,7 @@ entity clockDivider is
 end clockDivider;
 
 architecture Behavior of clockDivider is
-   signal counter : integer;  -- signal that does the
+   signal counter : std_logic_vector(24 downto 0);  -- signal that does the
                                                     -- counting
    signal CLK_1HZ : std_logic;           -- to drive the clk
 
@@ -23,12 +23,12 @@ begin  -- Behavior
    begin  -- process Prescaler
 
       if CLK_50MHz'event and CLK_50MHz = '1' then  -- rising clock edge
-         if counter < 5000000 then   -- Binary value is
+         if counter < "100110001001011010000000" then   -- Binary value is
                                                          -- 25e6
-            counter <= counter + 1;
+            counter <= std_logic_vector(unsigned(counter) + 1);
          else
             CLK_1HZ <= not CLK_1HZ;
-            counter <= 0;
+            counter <= (others => '0');
          end if;
       end if;
    end process Prescaler;

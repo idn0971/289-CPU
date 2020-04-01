@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity CPU289 is
 	port(
-		clk         : in  std_logic;
+		clk           : in  std_logic;
 		sel7seg       : in  std_logic_vector(4 downto 0);
 		displays_7seg : OUT STD_LOGIC_VECTOR(27 DOWNTO 0);
 		rst           : in  std_logic
@@ -101,11 +101,26 @@ architecture RTL of CPU289 is
 		    );
 	end component to_7seg;
 
-	component clockDivider is
+	component addressCalculator is
 		port(
-			CLK_50MHz : in  std_logic;  -- clock signal
-			clk       : out std_logic); -- clk to blink
-	end component clockDivider;
+			clk           : in  std_logic;
+			--rst : in std_logic;
+			newPc         : out std_logic_vector(31 downto 0);
+			en            : in  std_logic;
+			dataImm       : in  std_logic_vector(31 downto 0);
+			branchAlu     : in  std_logic;
+			branchControl : in  std_logic;
+			jumpReg       : in  std_logic;
+			dataA         : in  std_logic_vector(31 downto 0);
+			pc            : in  std_logic_vector(31 downto 0)
+		);
+	end component addressCalculator;
+
+	--component clockDivider is
+	--	port(
+	--		CLK_50MHz : in  std_logic;  -- clock signal
+	--		clk       : out std_logic); -- clk to blink
+	--end component clockDivider;
 
 	signal instruction   : STD_LOGIC_VECTOR(31 downto 0);
 	signal selA          : STD_LOGIC_VECTOR(4 downto 0);
@@ -141,10 +156,7 @@ begin
 	regEn <= std_logic(regREn) or std_logic(regWEn);
 	aluB  <= dataImm when aluImm = '1' else dataB;
 	dataD <= dataMem when memToReg = '1' else aluOut;
-	newPC <= std_logic_vector(signed(pc) + signed(dataImm)) when (branchAlu = '1' and branchControl = '1' and regWEn = '1')
-	         else std_logic_vector(signed(dataA) + signed(dataImm)) and x"fffffffe" when (jumpReg = '1' and branchAlu = '1' and regWEn = '1')
-	         else std_logic_vector(signed(pc) + 4) when regWEn = '1'
-	       ;
+
 	instROM : instructionMemory
 		port map(
 			address => pc(9 downto 0),
@@ -153,10 +165,23 @@ begin
 		);
 
 	--clockDivide : clockDivider
-		--port map(
-		--	CLK_50MHz => clkIn,
-		--	clk       => clk
-		--);
+	--port map(
+	--	CLK_50MHz => clkIn,
+	--	clk       => clk
+	--);
+
+	newAddress : addressCalculator
+		port map(
+			clk           => clk,
+			newPc         => newPC,
+			en            => aluEn,
+			dataImm       => dataImm,
+			branchAlu     => branchAlu,
+			branchControl => branchControl,
+			jumpReg       => jumpReg,
+			dataA         => dataA,
+			pc            => pc
+		);
 
 	control : controlUnit
 		port map(
@@ -224,7 +249,7 @@ begin
 			I_clk   => clk,
 			I_nPC   => newPC,
 			reset   => rst,
-			fetchEn => fetchEn,
+			fetchEn => regWEn,
 			O_PC    => pc
 		);
 

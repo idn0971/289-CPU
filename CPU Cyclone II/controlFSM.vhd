@@ -16,11 +16,12 @@ ENTITY controlFSM IS
 end controlFSM;
 
 architecture behavior of controlFSM is
-	TYPE state IS (Fetch, Decode, regRead, ALU, memory, regWrite);
+	TYPE state IS (Fetch, Fetch2, Fetch3, Decode, Decode2, regRead, regRead2, ALU, ALU2, memory, memory2, regWrite, regWrite2
+	);
 	signal currState : state := Fetch;
 	signal nextState : state;
 begin
-	process(clk, reset, currState, nextState)
+	process(clk, reset, nextState, currState)
 	begin
 		if reset = '0' then
 			currState <= Fetch;
@@ -30,60 +31,74 @@ begin
 		if rising_edge(clk) then
 			case currState is
 				when Fetch =>
+					nextState <= Fetch2;
+				when Fetch2 =>
+					nextState <= Fetch3;
+				when Fetch3 =>
 					nextState <= Decode;
 				when Decode =>
+					nextState <= Decode2;
+				when Decode2 =>
 					nextState <= regRead;
 				when regRead =>
+					nextState <= regRead2;
+				when regRead2 =>
 					nextState <= ALU;
 				when ALU =>
-				if (inst = "0000011" or inst = "0100011") then
+					nextState <= ALU2;
+				when ALU2 =>
+					if (inst = "0000011" or inst = "0100011") then
 						nextState <= memory;
-				else
+					else
 						nextState <= regWrite;
-				end if;
+					end if;
 				when memory =>
+					nextState <= memory2;
+				when memory2 =>
 					nextState <= regWrite;
 				when regWrite =>
+					nextState <= regWrite2;
+				when regWrite2 =>
 					nextState <= Fetch;
 			end case;
 		end if;
 		case currState is
-			when Fetch =>
+			when Fetch | Fetch2 | Fetch3 =>
 				regWEn   <= '0';
 				fetchEn  <= '1';
 				decodeEn <= '0';
 				regREn   <= '0';
 				aluEn    <= '0';
 				memoryEn <= '0';
-			when Decode =>
+			when Decode            |Decode2 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '1';
 				regREn   <= '0';
 				aluEn    <= '0';
 				memoryEn <= '0';
-			when regRead =>
+			when regRead          |regRead2 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '0';
 				regREn   <= '1';
 				aluEn    <= '0';
 				memoryEn <= '0';
-			when ALU =>
+			when ALU                    |ALU2 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '0';
 				regREn   <= '0';
 				aluEn    <= '1';
 				memoryEn <= '0';
-			when memory =>
+			when memory                 |memory2 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '0';
 				regREn   <= '0';
 				aluEn    <= '0';
 				memoryEn <= '1';
-			when regWrite =>
+			when regWrite               |regWrite2 =>
 				regWEn   <= '1';
 				fetchEn  <= '0';
 				decodeEn <= '0';
