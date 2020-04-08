@@ -18,7 +18,8 @@ begin
 
 	process(I_clk)
 	begin
-		if rising_edge(I_clk) and (fetchEn = '1' or reset = '0') then
+		if rising_edge(I_clk) and (fetchEn = '1' or reset = '0') 
+		then
 
 			if reset = '0' then
 				O_PC <= X"00000000";

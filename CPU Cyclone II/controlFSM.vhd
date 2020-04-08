@@ -16,7 +16,7 @@ ENTITY controlFSM IS
 end controlFSM;
 
 architecture behavior of controlFSM is
-	TYPE state IS (Fetch, Fetch2, Fetch3, Decode, Decode2, regRead, regRead2, ALU, ALU2, memory, memory2, regWrite, regWrite2
+	TYPE state IS (Fetch, Fetch2, Fetch3, Decode, Decode2, regRead, regRead2, ALU, ALU2, ALU3, memory, memory2, regWrite, regWrite2
 	);
 	signal currState : state := Fetch;
 	signal nextState : state;
@@ -47,6 +47,8 @@ begin
 				when ALU =>
 					nextState <= ALU2;
 				when ALU2 =>
+					nextState <= ALU3;
+				when ALU3 =>
 					if (inst = "0000011" or inst = "0100011") then
 						nextState <= memory;
 					else
@@ -84,7 +86,7 @@ begin
 				regREn   <= '1';
 				aluEn    <= '0';
 				memoryEn <= '0';
-			when ALU                    |ALU2 =>
+			when ALU                    |ALU2|ALU3 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '0';

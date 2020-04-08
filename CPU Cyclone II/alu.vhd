@@ -86,38 +86,50 @@ begin
 				when "10100" =>
 					if A = B then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when "10101" =>
 					if A /= B then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when "10111" =>
 					if signed(A) < signed(B) then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when "11000" =>
 					if signed(A) >= signed(B) then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when "11001" =>
 					if unsigned(A) < unsigned(B) then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when "11010" =>
 					if unsigned(A) >= unsigned(B) then
 						shouldBranch <= '1';
+						output <= X"00000000";
 					else
 						shouldBranch <= '0';
+						output <= X"00000000";
 					end if;
 				when others => output <= X"00000000";
 			end case;

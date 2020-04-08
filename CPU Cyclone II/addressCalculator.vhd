@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity addressCalculator is
 	port(
 		clk           : in  std_logic;
-		--rst : in std_logic;
+		rst : in std_logic;
 		newPc         : out std_logic_vector(31 downto 0);
 		en            : in  std_logic;
 		dataImm       : in  std_logic_vector(31 downto 0);
@@ -21,9 +21,12 @@ architecture RTL of addressCalculator is
 
 begin
 
-	process(clk)
+	process(clk, pc, rst)
 	begin
-		if (rising_edge(clk) and en = '1') then
+		if rst = '0' then 
+			newPc <= pc;
+		elsif (rising_edge(clk) and en = '1') 
+		then
 			case branchAlu is
 				when '1' =>
 					if (branchControl = '1') then

@@ -58,7 +58,8 @@ architecture RTL of CPU289 is
 			sel7Seg  : in  std_logic_vector(4 downto 0);
 			selD     : in  STD_LOGIC_VECTOR(4 downto 0);
 			we       : in  std_logic;
-			en       : in  std_logic;
+			regREn   : in  std_logic;
+			regWEn   : in  std_logic;
 			dataA    : out std_logic_vector(31 downto 0);
 			data7seg : out std_logic_vector(31 downto 0);
 			dataB    : out std_logic_vector(31 downto 0)
@@ -69,8 +70,8 @@ architecture RTL of CPU289 is
 		PORT(
 			clock     : IN  STD_LOGIC := '1';
 			data      : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
-			rdaddress : IN  STD_LOGIC_VECTOR(11 DOWNTO 0);
-			wraddress : IN  STD_LOGIC_VECTOR(11 DOWNTO 0);
+			rdaddress : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
+			wraddress : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
 			wren      : IN  STD_LOGIC := '0';
 			q         : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 		);
@@ -85,11 +86,11 @@ architecture RTL of CPU289 is
 	end component;
 
 	component pc_unit is
-		Port(I_clk   : in  STD_LOGIC;
-		     I_nPC   : in  STD_LOGIC_VECTOR(31 downto 0);
-		     reset   : in  std_LOGIC;
-		     fetchEn : in  std_LOGIC;
-		     O_PC    : out STD_LOGIC_VECTOR(31 downto 0)
+		Port(I_clk : in  STD_LOGIC;
+		     I_nPC : in  STD_LOGIC_VECTOR(31 downto 0);
+		     reset : in  std_LOGIC;
+		      fetchEn : in  std_LOGIC;
+		     O_PC  : out STD_LOGIC_VECTOR(31 downto 0)
 		    );
 	end component pc_unit;
 
@@ -104,7 +105,7 @@ architecture RTL of CPU289 is
 	component addressCalculator is
 		port(
 			clk           : in  std_logic;
-			--rst : in std_logic;
+			rst           : in  std_logic;
 			newPc         : out std_logic_vector(31 downto 0);
 			en            : in  std_logic;
 			dataImm       : in  std_logic_vector(31 downto 0);
@@ -149,11 +150,11 @@ architecture RTL of CPU289 is
 	signal dataMem       : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	signal newPC         : STD_LOGIC_VECTOR(31 downto 0);
 	signal data7seg      : std_logic_vector(31 downto 0);
-	signal regEn         : std_logic;
+	--signal regEn         : std_logic;
 	--signal clk           : std_logic := '1';
 
 begin
-	regEn <= std_logic(regREn) or std_logic(regWEn);
+	--regEn <= std_logic(regREn) or std_logic(regWEn);
 	aluB  <= dataImm when aluImm = '1' else dataB;
 	dataD <= dataMem when memToReg = '1' else aluOut;
 
@@ -172,15 +173,16 @@ begin
 
 	newAddress : addressCalculator
 		port map(
-			clk           => clk,
-			newPc         => newPC,
-			en            => aluEn,
-			dataImm       => dataImm,
-			branchAlu     => branchAlu,
+			clk => clk,
+			rst => rst,
+			newPc => newPC,
+			en => aluEn,
+			dataImm => dataImm,
+			branchAlu => branchAlu,
 			branchControl => branchControl,
-			jumpReg       => jumpReg,
-			dataA         => dataA,
-			pc            => pc
+			jumpReg => jumpReg,
+			dataA => dataA,
+			pc => pc
 		);
 
 	control : controlUnit
@@ -215,7 +217,8 @@ begin
 			sel7Seg  => sel7seg,
 			selD     => selD,
 			we       => regDwe,
-			en       => regEn,
+			regREn       => regREn,
+			regWEn => regWEn,
 			dataA    => dataA,
 			data7seg => data7seg,
 			dataB    => dataB
@@ -238,19 +241,19 @@ begin
 		port map(
 			clock     => clk,
 			data      => dataB,
-			rdaddress => aluOut(11 downto 0),
-			wraddress => aluOut(11 downto 0),
+			rdaddress => aluOut(10 downto 0),
+			wraddress => aluOut(10 downto 0),
 			wren      => memWren,
 			q         => dataMem
 		);
 
 	programCounter : pc_unit
 		port map(
-			I_clk   => clk,
-			I_nPC   => newPC,
-			reset   => rst,
+			I_clk => clk,
+			I_nPC => newPC,
+			reset => rst,
 			fetchEn => regWEn,
-			O_PC    => pc
+			O_PC  => pc
 		);
 
 	sevenSeg1 : to_7seg

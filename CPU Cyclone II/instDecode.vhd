@@ -43,7 +43,7 @@ begin
 				when "0110111"|"0010111" =>
 					O_dataIMM <= I_dataInst(31 downto 12) & "000000000000";
 				when others =>
-					O_dataIMM <= std_logic_vector(resize(unsigned(I_dataInst(31 downto 20)), 32));
+					O_dataIMM <= std_logic_vector(resize(signed(I_dataInst(31 downto 20)), 32));
 			end case;
 			case I_dataInst(6 downto 0) is
 				when "1100011" | "1101111" =>
