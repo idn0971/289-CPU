@@ -7,6 +7,7 @@ ENTITY controlFSM IS
 		clk      : in  std_logic;
 		reset    : in  std_logic;
 		inst     : in  std_logic_vector(6 downto 0);
+		step     : in  std_logic;
 		decodeEn : out std_logic;
 		regREn   : out std_logic;
 		regWEn   : out std_logic;
@@ -16,19 +17,20 @@ ENTITY controlFSM IS
 end controlFSM;
 
 architecture behavior of controlFSM is
-	TYPE state IS (Fetch, Fetch2, Fetch3, Decode, Decode2, regRead, regRead2, ALU, ALU2, ALU3, memory, memory2, regWrite, regWrite2
+	TYPE state IS (Fetch, Fetch2, Fetch3, Decode, Decode2, regRead, regRead2, ALU, ALU2, ALU3, memory, memory2, memory3, regWrite, regWrite2
 	);
 	signal currState : state := Fetch;
 	signal nextState : state;
 begin
-	process(clk, reset, nextState, currState)
+	process(clk, currState, nextState, reset)
 	begin
 		if reset = '0' then
 			currState <= Fetch;
 		else
 			currState <= nextState;
 		end if;
-		if rising_edge(clk) then
+
+		if rising_edge(clk) and step = '1' then
 			case currState is
 				when Fetch =>
 					nextState <= Fetch2;
@@ -57,6 +59,8 @@ begin
 				when memory =>
 					nextState <= memory2;
 				when memory2 =>
+					nextState <= memory3;
+				when memory3 =>
 					nextState <= regWrite;
 				when regWrite =>
 					nextState <= regWrite2;
@@ -93,7 +97,7 @@ begin
 				regREn   <= '0';
 				aluEn    <= '1';
 				memoryEn <= '0';
-			when memory                 |memory2 =>
+			when memory                 |memory2|memory3 =>
 				regWEn   <= '0';
 				fetchEn  <= '0';
 				decodeEn <= '0';

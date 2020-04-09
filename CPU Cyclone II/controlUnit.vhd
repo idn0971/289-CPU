@@ -22,17 +22,19 @@ entity controlUnit is
 		aluEn      : out std_logic;
 		memoryEn   : out std_logic;
 		fetchEn    : out std_logic;
+		step     : in  std_logic;
 		rst        : in  std_logic
 	);
 end entity controlUnit;
 
 architecture RTL of controlUnit is
 
-	component controlFSM IS
-		PORT(
+	component controlFSM
+		port(
 			clk      : in  std_logic;
 			reset    : in  std_logic;
 			inst     : in  std_logic_vector(6 downto 0);
+			step     : in  std_logic;
 			decodeEn : out std_logic;
 			regREn   : out std_logic;
 			regWEn   : out std_logic;
@@ -86,6 +88,7 @@ begin
 			regREn   => regREn,
 			regWEn   => regWEn,
 			aluEn    => aluEn,
+			step     => step,
 			memoryEn => memoryEn,
 			fetchEn  => fetchEn
 		);

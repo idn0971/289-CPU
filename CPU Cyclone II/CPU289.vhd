@@ -5,6 +5,7 @@ use ieee.numeric_std.all;
 entity CPU289 is
 	port(
 		clk           : in  std_logic;
+		step          : in  std_logic;
 		sel7seg       : in  std_logic_vector(4 downto 0);
 		displays_7seg : OUT STD_LOGIC_VECTOR(27 DOWNTO 0);
 		rst           : in  std_logic
@@ -32,21 +33,24 @@ architecture RTL of CPU289 is
 			aluEn      : out std_logic;
 			memoryEn   : out std_logic;
 			fetchEn    : out std_logic;
+			step       : in  std_logic;
 			rst        : in  std_logic
 		);
 	end component controlUnit;
 
-	component alu is
-		port(                           -- the alu connections to external circuitry:
-			A      : in  std_logic_vector(31 downto 0); -- operand A
-			B      : in  std_logic_vector(31 downto 0); -- operand B
-			en     : in  std_logic;     -- enable
-			OP     : in  std_logic_vector(4 downto 0); -- opcode
-			Y      : out std_logic_vector(31 downto 0); -- operation result
-			imm    : in  std_logic_vector(4 downto 0); -- immediate data
-			pc     : in  std_logic_vector(31 downto 0);
-			branch : out std_logic;     -- Branch flag
-			clk    : IN  STD_LOGIC);
+	component alu
+		port(
+			A        : in  std_logic_vector(31 downto 0);
+			B        : in  std_logic_vector(31 downto 0);
+			en       : in  std_logic;
+			OP       : in  std_logic_vector(4 downto 0);
+			Y        : out std_logic_vector(31 downto 0);
+			imm      : in  std_logic_vector(4 downto 0);
+			pc       : in  std_logic_vector(31 downto 0);
+			memWrite : out std_logic;
+			branch   : out std_logic;
+			clk      : IN  STD_LOGIC
+		);
 	end component alu;
 
 	component reg32by32
@@ -86,11 +90,11 @@ architecture RTL of CPU289 is
 	end component;
 
 	component pc_unit is
-		Port(I_clk : in  STD_LOGIC;
-		     I_nPC : in  STD_LOGIC_VECTOR(31 downto 0);
-		     reset : in  std_LOGIC;
-		      fetchEn : in  std_LOGIC;
-		     O_PC  : out STD_LOGIC_VECTOR(31 downto 0)
+		Port(I_clk   : in  STD_LOGIC;
+		     I_nPC   : in  STD_LOGIC_VECTOR(31 downto 0);
+		     reset   : in  std_LOGIC;
+		     fetchEn : in  std_LOGIC;
+		     O_PC    : out STD_LOGIC_VECTOR(31 downto 0)
 		    );
 	end component pc_unit;
 
@@ -123,40 +127,43 @@ architecture RTL of CPU289 is
 	--		clk       : out std_logic); -- clk to blink
 	--end component clockDivider;
 
-	signal instruction   : STD_LOGIC_VECTOR(31 downto 0);
-	signal selA          : STD_LOGIC_VECTOR(4 downto 0);
-	signal selB          : STD_LOGIC_VECTOR(4 downto 0);
-	signal selD          : STD_LOGIC_VECTOR(4 downto 0);
-	signal dataImm       : STD_LOGIC_VECTOR(31 downto 0);
-	signal regDwe        : STD_LOGIC;
-	signal aluOp         : STD_LOGIC_VECTOR(4 downto 0);
-	signal memWren       : std_logic;
-	signal memToReg      : std_logic;
-	signal branchControl : std_logic := '0';
-	signal aluImm        : std_logic;
-	signal jumpReg       : std_logic := '1';
-	signal regREn        : std_logic;
-	signal regWEn        : std_logic;
-	signal aluEn         : std_logic;
-	signal memoryEn      : std_logic;
-	signal fetchEn       : std_logic;
-	signal pc            : STD_LOGIC_VECTOR(31 DOWNTO 0);
-	signal dataD         : std_logic_vector(31 downto 0);
-	signal dataA         : std_logic_vector(31 downto 0);
-	signal dataB         : std_logic_vector(31 downto 0);
-	signal aluOut        : std_logic_vector(31 downto 0);
-	signal branchAlu     : std_logic;
-	signal aluB          : std_logic_vector(31 downto 0);
-	signal dataMem       : STD_LOGIC_VECTOR(31 DOWNTO 0);
-	signal newPC         : STD_LOGIC_VECTOR(31 downto 0);
-	signal data7seg      : std_logic_vector(31 downto 0);
+	signal instruction     : STD_LOGIC_VECTOR(31 downto 0);
+	signal selA            : STD_LOGIC_VECTOR(4 downto 0);
+	signal selB            : STD_LOGIC_VECTOR(4 downto 0);
+	signal selD            : STD_LOGIC_VECTOR(4 downto 0);
+	signal dataImm         : STD_LOGIC_VECTOR(31 downto 0);
+	signal regDwe          : STD_LOGIC;
+	signal aluOp           : STD_LOGIC_VECTOR(4 downto 0);
+	signal memWren         : std_logic;
+	signal memToReg        : std_logic;
+	signal branchControl   : std_logic := '0';
+	signal aluImm          : std_logic;
+	signal jumpReg         : std_logic := '1';
+	signal regREn          : std_logic;
+	signal regWEn          : std_logic;
+	signal aluEn           : std_logic;
+	signal memoryEn        : std_logic;
+	signal fetchEn         : std_logic;
+	signal pc              : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	signal dataD           : std_logic_vector(31 downto 0);
+	signal dataA           : std_logic_vector(31 downto 0);
+	signal dataB           : std_logic_vector(31 downto 0);
+	signal aluOut          : std_logic_vector(31 downto 0);
+	signal branchAlu       : std_logic;
+	signal aluB            : std_logic_vector(31 downto 0);
+	signal dataMem         : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	signal newPC           : STD_LOGIC_VECTOR(31 downto 0);
+	signal data7seg        : std_logic_vector(31 downto 0);
+	signal memWrite        : std_logic;
+	signal controlMemWrite : std_logic;
 	--signal regEn         : std_logic;
 	--signal clk           : std_logic := '1';
 
 begin
 	--regEn <= std_logic(regREn) or std_logic(regWEn);
-	aluB  <= dataImm when aluImm = '1' else dataB;
-	dataD <= dataMem when memToReg = '1' else aluOut;
+	aluB    <= dataImm when aluImm = '1' else dataB;
+	dataD   <= dataMem when memToReg = '1' else aluOut;
+	memWren <= memoryEn and memWrite and controlMemWrite;
 
 	instROM : instructionMemory
 		port map(
@@ -173,16 +180,16 @@ begin
 
 	newAddress : addressCalculator
 		port map(
-			clk => clk,
-			rst => rst,
-			newPc => newPC,
-			en => aluEn,
-			dataImm => dataImm,
-			branchAlu => branchAlu,
+			clk           => clk,
+			rst           => rst,
+			newPc         => newPC,
+			en            => aluEn,
+			dataImm       => dataImm,
+			branchAlu     => branchAlu,
 			branchControl => branchControl,
-			jumpReg => jumpReg,
-			dataA => dataA,
-			pc => pc
+			jumpReg       => jumpReg,
+			dataA         => dataA,
+			pc            => pc
 		);
 
 	control : controlUnit
@@ -195,7 +202,7 @@ begin
 			O_dataIMM  => dataImm,
 			O_regDwe   => regDwe,
 			O_aluop    => aluOp,
-			memWren    => memWren,
+			memWren    => controlMemWrite,
 			memToReg   => memToReg,
 			branch     => branchControl,
 			aluImm     => aluImm,
@@ -205,6 +212,7 @@ begin
 			aluEn      => aluEn,
 			memoryEn   => memoryEn,
 			fetchEn    => fetchEn,
+			step       => step,
 			rst        => rst
 		);
 
@@ -217,8 +225,8 @@ begin
 			sel7Seg  => sel7seg,
 			selD     => selD,
 			we       => regDwe,
-			regREn       => regREn,
-			regWEn => regWEn,
+			regREn   => regREn,
+			regWEn   => regWEn,
 			dataA    => dataA,
 			data7seg => data7seg,
 			dataB    => dataB
@@ -226,15 +234,16 @@ begin
 
 	cpuAlu : alu
 		port map(
-			A      => dataA,
-			B      => aluB,
-			en     => aluEn,
-			OP     => aluOp,
-			Y      => aluOut,
-			imm    => selB,
-			pc     => pc,
-			branch => branchAlu,
-			clk    => clk
+			memWrite => memWrite,
+			A        => dataA,
+			B        => aluB,
+			en       => aluEn,
+			OP       => aluOp,
+			Y        => aluOut,
+			imm      => selB,
+			pc       => pc,
+			branch   => branchAlu,
+			clk      => clk
 		);
 
 	ram : memory
@@ -249,11 +258,11 @@ begin
 
 	programCounter : pc_unit
 		port map(
-			I_clk => clk,
-			I_nPC => newPC,
-			reset => rst,
+			I_clk   => clk,
+			I_nPC   => newPC,
+			reset   => rst,
 			fetchEn => regWEn,
-			O_PC  => pc
+			O_PC    => pc
 		);
 
 	sevenSeg1 : to_7seg
