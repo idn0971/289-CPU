@@ -1,0 +1,29 @@
+
+# Factorial Recursive Function
+li sp, 0x200
+li a0, 4
+jal startFactorial
+j endFactorial
+startFactorial: addi sp,sp, -8
+sw ra, 4(sp)
+sw a0, 0(sp)
+li t0, 1
+bge a0, t0, factorialIf
+j factorialElse
+factorialIf:
+addi a0, a0, -1
+jal startFactorial
+lw a1, 0(sp)
+mul a0, a0, a1
+j endFactorialIf
+factorialElse:
+li a0, 1
+endFactorialIf:
+lw ra, 4(sp)
+addi sp,sp,8
+jr ra
+endFactorial:
+mv s6, a0
+#endProgram:
+end:
+jal end
