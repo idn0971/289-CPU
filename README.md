@@ -5,4 +5,8 @@
  
 CPU is now working. 
 
-Source files are stored in the Cyclone II folder.
+Source files and memory files are stored in the Cyclone II folder.
+
+Assembly files with the basic tests are in the tests folder.
+
+
