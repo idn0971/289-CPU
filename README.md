@@ -3,6 +3,6 @@
  
  This CPU is designed as a basic non pipelined CPU that can be further expanded on.
  
- Currently the CPU should work if given proper inputs.
- 
- Still need to write test cases and figure out someway to get outputs off of CPU.
+CPU is now working. 
+
+Source files are stored in the Cyclone II folder.
