@@ -9,4 +9,4 @@ Source files and memory files are stored in the Cyclone II folder.
 
 Assembly files with the basic tests are in the tests folder.
 
-
+Link to video of the CPU running on a Cyclone II FPGA: https://drive.google.com/open?id=1CopCN4ua2efV7EYqMGeDeZtkYNlM7cx_.
