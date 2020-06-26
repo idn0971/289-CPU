@@ -22,7 +22,7 @@ entity controlUnit is
 		aluEn      : out std_logic;
 		memoryEn   : out std_logic;
 		fetchEn    : out std_logic;
-		step     : in  std_logic;
+		step       : in  std_logic;
 		rst        : in  std_logic
 	);
 end entity controlUnit;
@@ -84,11 +84,11 @@ begin
 			clk      => clk,
 			reset    => rst,
 			inst     => opcode,
+			step     => step,
 			decodeEn => decodeEn,
 			regREn   => regREn,
 			regWEn   => regWEn,
 			aluEn    => aluEn,
-			step     => step,
 			memoryEn => memoryEn,
 			fetchEn  => fetchEn
 		);

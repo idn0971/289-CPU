@@ -74,8 +74,8 @@ architecture RTL of CPU289 is
 		PORT(
 			clock     : IN  STD_LOGIC := '1';
 			data      : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
-			rdaddress : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
-			wraddress : IN  STD_LOGIC_VECTOR(10 DOWNTO 0);
+			rdaddress : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
+			wraddress : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
 			wren      : IN  STD_LOGIC := '0';
 			q         : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 		);
@@ -250,8 +250,8 @@ begin
 		port map(
 			clock     => clk,
 			data      => dataB,
-			rdaddress => aluOut(10 downto 0),
-			wraddress => aluOut(10 downto 0),
+			rdaddress => aluOut(12 downto 0),
+			wraddress => aluOut(12 downto 0),
 			wren      => memWren,
 			q         => dataMem
 		);
